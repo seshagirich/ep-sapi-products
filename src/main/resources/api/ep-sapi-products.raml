@@ -1,0 +1,29 @@
+#%RAML 1.0
+title: ep-sapi-products
+version: v1
+protocols:
+  - HTTP
+  - HTTPS
+
+/createProducts:
+  post:
+    body:
+      application/json:
+        example:
+          {
+            "productName": "bulb",
+            "productId": "112",
+            "productQty": 2323,
+            "productSize": "large",
+            "productPrice": 100
+          }
+    responses:
+      200:
+        body:
+          application/json:
+            example:
+              {
+                "date": "2024-11-09T07:29:39.124888Z",
+                "message": "upload success"
+              }
+

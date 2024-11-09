@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="37a18270-653f-4c21-b1a4-bcc93bfc066a" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<salesforce:sfdc-config name="Salesforce_Config" doc:name="Salesforce Config" doc:id="799b7b60-6435-4da9-b910-e3d83af75b8a" >
+		<salesforce:basic-connection username="seshuchennupati1@gmail.com" password="Seshu@2020" securityToken="mIEUzWtCmNDymdsAxWpBSx7bk" />
+	</salesforce:sfdc-config>
+	<flow name="reference-productsFlow" doc:id="953fad29-5730-4bd4-b7bf-1056b8fb4032" >
+		<http:listener doc:name="POST: /test" doc:id="c315bf26-9c75-435e-91ef-dac92b0b8024" config-ref="HTTP_Listener_config" path="/test"/>
+		<salesforce:create type="eproducts__c" doc:id="19fb6871-4102-43e9-91bc-55b644278bd2" doc:name="upload products in eproducts (eproducts__c)" config-ref="Salesforce_Config"/>
+		<ee:transform doc:name="response" doc:id="c4641e22-5fc4-4961-9790-654b0014476e" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "date": now(),
+  "message": "upload success"
+}
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="ep-sapi-productsFetchFlow" doc:id="34e141bb-1481-46fb-b8cd-c0485c0defbc" >
+		<http:listener doc:name="GET: /fetchProducts" doc:id="b54d646d-3842-45ac-8486-78102dc0e731" config-ref="HTTP_Listener_config" path="/fetchProducts"/>
+		<salesforce:query doc:name="Query" doc:id="5e234bc5-b26b-445a-8fdd-bc40384ee42b" config-ref="Salesforce_Config">
+			<salesforce:salesforce-query ><![CDATA[SELECT productId__c,productName__c,productQty__c,productPrice__c,productSize__c FROM eproducts__c ]]></salesforce:salesforce-query>
+		</salesforce:query>
+		<ee:transform doc:name="response" doc:id="ad088daf-74c9-4742-a928-65439155193d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
