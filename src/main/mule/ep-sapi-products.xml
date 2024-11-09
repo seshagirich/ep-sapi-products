@@ -122,7 +122,7 @@ output application/json
         </error-handler>
     </flow>
 	<flow name="post:\createProducts:application\json:ep-sapi-products-config">
-		<logger level="INFO" doc:name="==start==createproducts flow=====" doc:id="f688cf51-8bbb-4370-9035-922b5fffd194" message="==start==createproducts flow=====" />
+		<logger level="INFO" doc:name="==start==createproducts flow=====" doc:id="f688cf51-8bbb-4370-9035-922b5fffd194" message="==start==createproducts flow=====test===" />
 		<salesforce:create doc:name="Create" doc:id="be9020ef-0e93-49e6-ae25-624f2cfe6c1a" config-ref="Salesforce_Config" type="eproducts__c" />
 		<ee:transform doc:name="Transform Message" doc:id="211311e3-20d9-43c1-aaa9-29a33519cdcc">
 			<ee:message>
